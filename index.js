@@ -1,13 +1,23 @@
-var express = require('express');
-var app = express();
+var http = require('http');
+var url = require("url");
+var fs = require('fs');
 
-app.set('port', 5000);
-app.use(express.static(__dirname + '/public'));
 
-app.get('/', function(request, response) {
-  response.send('Hello World!')
+var server = http.createServer(function(req, res) {
+  var pathname = url.parse(req.url).pathname;
+  if ('/' == pathname) {
+    if (req.method === 'GET') {
+
+      require('public/login.js');
+      //html表示
+     fs.readFile('index.html', 'UTF-8', function(err, data){
+     res.writeHead(200, {'Content-Type': 'text/html'});
+     res.end(data);
+   });
+ }
+ }
 });
 
-app.listen(app.get('port'), function() {
-  console.log("Node app is running at localhost:" + app.get('port'))
+server.listen(5000, function () {
+  console.log('listening on port 5000');
 });
